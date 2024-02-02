@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocerapp/application/login_providers/login_provider.dart';
 import 'package:grocerapp/presentation/common_widgets/textformfield_widget.dart';
+import 'package:grocerapp/presentation/view/features/login/terms_conditions.dart';
 
 class LoginSection extends ConsumerWidget {
   const LoginSection({super.key});
@@ -61,6 +62,7 @@ class LoginSection extends ConsumerWidget {
                 child: Row(
                   children: [
                     Checkbox(
+                        key: const Key('login_term_check'),
                         value: provider,
                         onChanged: (value) {
                           ref
@@ -77,7 +79,14 @@ class LoginSection extends ConsumerWidget {
                           TextSpan(
                             text: 'terms and conditions',
                             style: const TextStyle(color: Colors.blue),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      showTermsAlertDialog(context),
+                                );
+                              },
                           ),
                         ],
                       ),
@@ -88,6 +97,7 @@ class LoginSection extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
+                  key: const Key("login_submit_button"),
                   child: Text("Submit",
                       style: provider
                           ? const TextStyle(color: Colors.red)
