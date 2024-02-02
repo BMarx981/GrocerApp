@@ -9,6 +9,7 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        key: const Key('dashboard_appbar'),
         title: const Text("Dashboard"),
       ),
       body: const Row(
