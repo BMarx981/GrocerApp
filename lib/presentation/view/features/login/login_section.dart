@@ -44,8 +44,7 @@ class LoginSection extends ConsumerWidget {
                       'login_username_textfield',
                     ),
                     validator: (value) {
-                      if (value == "") return "Please enter a valid user name";
-                      return null;
+                      return validateUsername(value);
                     },
                   ),
                 ),
@@ -89,6 +88,16 @@ class LoginSection extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String? validateUsername(String userName) {
+    if (userName == "") return "Please enter a valid user name";
+    return null;
+  }
+
+  String? validatePassword(String password) {
+    if (password == "") return "Please enter a valid password";
+    return null;
   }
 
   Widget _termAndConditionsRow(
