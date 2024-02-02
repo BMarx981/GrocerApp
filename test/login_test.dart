@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grocerapp/app.dart';
 import 'package:grocerapp/presentation/view/features/login/login_page.dart';
