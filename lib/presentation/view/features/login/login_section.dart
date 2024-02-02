@@ -53,11 +53,11 @@ class LoginSection extends ConsumerWidget {
                   child: CustomTextformField(
                     label: "Password",
                     obscureText: true,
+                    key: const Key('login_password_textfield'),
                     validator: (value) {
                       if (value == "") return "Plese enter a valid password";
                       return null;
                     },
-                    key: const Key('login_password_textfield'),
                   ),
                 ),
                 _termAndConditionsRow(provider, ref, context),

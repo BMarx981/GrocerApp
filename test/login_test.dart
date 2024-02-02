@@ -40,8 +40,7 @@ void main() {
       expect(find.byType(LoginPage), findsOneWidget);
     });
 
-    testWidgets('Validate login button tap', skip: true,
-        (WidgetTester tester) async {
+    testWidgets('Validate login button tap', (WidgetTester tester) async {
       FlutterError.onError = ignoredOverflowErrors;
       await tester.pumpWidget(App());
 
@@ -51,8 +50,24 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle(const Duration(minutes: 1),
-          EnginePhase.sendSemanticsUpdate, const Duration(minutes: 1));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('dashboard_appbar')), findsNothing);
+
+      await tester.enterText(
+          find.byKey(const Key('login_username_textfield')), 'h');
+      await tester.enterText(
+          find.byKey(const Key('login_password_textfield')), 'h');
+      await tester.tap(find.byType(Checkbox));
+      await tester.pumpAndSettle();
+
+      await tester.tap(
+        find.byKey(
+          const Key('login_submit_button'),
+        ),
+      );
+
+      await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('dashboard_appbar')), findsOneWidget);
     });
