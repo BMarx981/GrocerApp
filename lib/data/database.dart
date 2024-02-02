@@ -8,7 +8,7 @@ import 'package:path/path.dart' as p;
 
 part 'database.g.dart';
 
-@DataClassName('GroceryItem')
+@DataClassName('GroceryItemData')
 class GroceryItems extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().customConstraint('UNIQUE').nullable()();
@@ -17,13 +17,13 @@ class GroceryItems extends Table {
   TextColumn get location => text().nullable()();
 }
 
-@DataClassName('Recipe')
+@DataClassName('RecipeData')
 class Recipes extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().customConstraint('UNIQUE').nullable()();
 }
 
-@DataClassName('RecipeGroceryItem')
+@DataClassName('RecipeGroceryItemData')
 class RecipeGroceryItems extends Table {
   IntColumn get recipeId =>
       integer().customConstraint('REFERENCES recipes(id)').nullable()();
@@ -34,12 +34,12 @@ class RecipeGroceryItems extends Table {
   Set<Column> get primaryKey => {recipeId, groceryItemId};
 }
 
-@DriftDatabase(tables: [GroceryItems])
+@DriftDatabase(tables: [GroceryItems, RecipeGroceryItems, Recipes])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   LazyDatabase _openConnection() {
     final logger = Logger();
