@@ -20,9 +20,9 @@ class LoginPage extends ConsumerWidget {
                 image: AssetImage('assets/images/grocery_store_image.jpg'),
               ),
             ),
-            child: const Center(
+            child: Center(
               child: LoginSection(
-                key: Key('login_loginsection'),
+                key: const Key('login_loginsection'),
               ),
             ),
           )),

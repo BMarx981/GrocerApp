@@ -7,6 +7,7 @@ class CustomTextformField extends StatelessWidget {
       this.controller,
       this.label = "",
       this.obscureText = false,
+      this.validator,
       this.inputFormatters});
 
   ///This describes the textfield to the user. It is
@@ -19,7 +20,11 @@ class CustomTextformField extends StatelessWidget {
   ///Allows the textifled to only except specified text
   final List<TextInputFormatter>? inputFormatters;
 
+  ///The controller holds the text value
   final TextEditingController? controller;
+
+  ///The validator will check the textfields contents
+  final String? Function(String)? validator;
 
   @override
   Widget build(Object context) {
@@ -27,10 +32,18 @@ class CustomTextformField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       inputFormatters: inputFormatters,
+      validator: (value) {
+        if (validator != null && value != null) {
+          return validator!(value);
+        }
+        return null;
+      },
       decoration: InputDecoration(
-          label: Text(label),
-          border: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.blue))),
+        label: Text(label),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+      ),
     );
   }
 }
