@@ -29,8 +29,8 @@ class $GroceryItemsTable extends GroceryItems
       const VerificationMeta('quantity');
   @override
   late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
-      'quantity', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      'quantity', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _priceMeta = const VerificationMeta('price');
   @override
   late final GeneratedColumn<double> price = GeneratedColumn<double>(
@@ -64,8 +64,6 @@ class $GroceryItemsTable extends GroceryItems
     if (data.containsKey('quantity')) {
       context.handle(_quantityMeta,
           quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
-    } else if (isInserting) {
-      context.missing(_quantityMeta);
     }
     if (data.containsKey('price')) {
       context.handle(
@@ -89,7 +87,7 @@ class $GroceryItemsTable extends GroceryItems
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name']),
       quantity: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity']),
       price: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}price']),
       location: attachedDatabase.typeMapping
@@ -106,15 +104,11 @@ class $GroceryItemsTable extends GroceryItems
 class GroceryItemData extends DataClass implements Insertable<GroceryItemData> {
   final int id;
   final String? name;
-  final int quantity;
+  final int? quantity;
   final double? price;
   final String? location;
   const GroceryItemData(
-      {required this.id,
-      this.name,
-      required this.quantity,
-      this.price,
-      this.location});
+      {required this.id, this.name, this.quantity, this.price, this.location});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -122,7 +116,9 @@ class GroceryItemData extends DataClass implements Insertable<GroceryItemData> {
     if (!nullToAbsent || name != null) {
       map['name'] = Variable<String>(name);
     }
-    map['quantity'] = Variable<int>(quantity);
+    if (!nullToAbsent || quantity != null) {
+      map['quantity'] = Variable<int>(quantity);
+    }
     if (!nullToAbsent || price != null) {
       map['price'] = Variable<double>(price);
     }
@@ -136,7 +132,9 @@ class GroceryItemData extends DataClass implements Insertable<GroceryItemData> {
     return GroceryItemsCompanion(
       id: Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      quantity: Value(quantity),
+      quantity: quantity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(quantity),
       price:
           price == null && nullToAbsent ? const Value.absent() : Value(price),
       location: location == null && nullToAbsent
@@ -151,7 +149,7 @@ class GroceryItemData extends DataClass implements Insertable<GroceryItemData> {
     return GroceryItemData(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String?>(json['name']),
-      quantity: serializer.fromJson<int>(json['quantity']),
+      quantity: serializer.fromJson<int?>(json['quantity']),
       price: serializer.fromJson<double?>(json['price']),
       location: serializer.fromJson<String?>(json['location']),
     );
@@ -162,7 +160,7 @@ class GroceryItemData extends DataClass implements Insertable<GroceryItemData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String?>(name),
-      'quantity': serializer.toJson<int>(quantity),
+      'quantity': serializer.toJson<int?>(quantity),
       'price': serializer.toJson<double?>(price),
       'location': serializer.toJson<String?>(location),
     };
@@ -171,13 +169,13 @@ class GroceryItemData extends DataClass implements Insertable<GroceryItemData> {
   GroceryItemData copyWith(
           {int? id,
           Value<String?> name = const Value.absent(),
-          int? quantity,
+          Value<int?> quantity = const Value.absent(),
           Value<double?> price = const Value.absent(),
           Value<String?> location = const Value.absent()}) =>
       GroceryItemData(
         id: id ?? this.id,
         name: name.present ? name.value : this.name,
-        quantity: quantity ?? this.quantity,
+        quantity: quantity.present ? quantity.value : this.quantity,
         price: price.present ? price.value : this.price,
         location: location.present ? location.value : this.location,
       );
@@ -209,7 +207,7 @@ class GroceryItemData extends DataClass implements Insertable<GroceryItemData> {
 class GroceryItemsCompanion extends UpdateCompanion<GroceryItemData> {
   final Value<int> id;
   final Value<String?> name;
-  final Value<int> quantity;
+  final Value<int?> quantity;
   final Value<double?> price;
   final Value<String?> location;
   const GroceryItemsCompanion({
@@ -222,10 +220,10 @@ class GroceryItemsCompanion extends UpdateCompanion<GroceryItemData> {
   GroceryItemsCompanion.insert({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    required int quantity,
+    this.quantity = const Value.absent(),
     this.price = const Value.absent(),
     this.location = const Value.absent(),
-  }) : quantity = Value(quantity);
+  });
   static Insertable<GroceryItemData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -245,7 +243,7 @@ class GroceryItemsCompanion extends UpdateCompanion<GroceryItemData> {
   GroceryItemsCompanion copyWith(
       {Value<int>? id,
       Value<String?>? name,
-      Value<int>? quantity,
+      Value<int?>? quantity,
       Value<double?>? price,
       Value<String?>? location}) {
     return GroceryItemsCompanion(
