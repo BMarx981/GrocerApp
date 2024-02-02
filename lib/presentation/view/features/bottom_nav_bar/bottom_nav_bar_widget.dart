@@ -10,6 +10,9 @@ class BottomNavBar extends ConsumerWidget {
     return BottomNavigationBar(items: [
       BottomNavigationBarItem(
         icon: IconButton(
+          key: const Key('bottomnav_lists_button'),
+          splashColor: null,
+          hoverColor: null,
           icon: const Icon(Icons.home),
           onPressed: () {
             Beamer.of(context).beamToReplacementNamed('/dashboard');
@@ -19,6 +22,7 @@ class BottomNavBar extends ConsumerWidget {
       ),
       BottomNavigationBarItem(
         icon: IconButton(
+          key: const Key('bottomnav_lists_button'),
           icon: const Icon(Icons.list),
           onPressed: () {
             Beamer.of(context).beamToReplacementNamed('/lists');
@@ -28,6 +32,7 @@ class BottomNavBar extends ConsumerWidget {
       ),
       BottomNavigationBarItem(
         icon: IconButton(
+          key: const Key('bottomnav_recipes_button'),
           icon: const Icon(Icons.book),
           onPressed: () {
             Beamer.of(context).beamToReplacementNamed('/recipes');
