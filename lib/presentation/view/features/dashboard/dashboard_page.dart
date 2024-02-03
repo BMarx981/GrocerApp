@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocerapp/presentation/view/features/bottom_nav_bar/bottom_nav_bar_widget.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/recent_items_grid_widget.dart';
+import 'package:grocerapp/presentation/view/features/dashboard/recent_lists_widget.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/recent_recipes_grid_widget.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -29,7 +30,8 @@ class DashboardPage extends ConsumerWidget {
                     crossAxisCount: gridCount,
                     children: const [
                       RecentItemsGridWidget(),
-                      RecentRecipesGridWidget()
+                      RecentRecipesGridWidget(),
+                      RecentListsGridWidget(),
                     ]);
               },
             ),

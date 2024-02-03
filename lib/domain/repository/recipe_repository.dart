@@ -14,6 +14,6 @@ class RecipeRepositoryProvider extends _$RecipeRepositoryProvider {
   }
 
   Future<int> addRecipe({String? name}) {
-    return (db.into(db.recipes).insert(RecipesCompanion(name: Value(name))));
+    return db.into(db.recipes).insert(RecipesCompanion(name: Value(name)));
   }
 }

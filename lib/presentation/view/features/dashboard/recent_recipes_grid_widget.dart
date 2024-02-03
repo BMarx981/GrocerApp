@@ -17,7 +17,7 @@ class _RecentRecipesGridWidgetState
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(18.0),
       child: Container(
           height: 100,
           decoration: BoxDecoration(
