@@ -6,23 +6,21 @@ part of 'lists_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$listsRepositoryProviderHash() =>
-    r'02637744eabaf0ee0cfd5a42e5a5d0f89a56ed4a';
+String _$listsRepositoryHash() => r'f1050970ed252d24640645d1b2deb1ce9ebdd37c';
 
-/// See also [ListsRepositoryProvider].
-@ProviderFor(ListsRepositoryProvider)
-final listsRepositoryProviderProvider = AutoDisposeAsyncNotifierProvider<
-    ListsRepositoryProvider, List<GroceryItemData>>.internal(
-  ListsRepositoryProvider.new,
-  name: r'listsRepositoryProviderProvider',
+/// See also [ListsRepository].
+@ProviderFor(ListsRepository)
+final listsRepositoryProvider = AutoDisposeAsyncNotifierProvider<
+    ListsRepository, List<ShoppingListData>>.internal(
+  ListsRepository.new,
+  name: r'listsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$listsRepositoryProviderHash,
+      : _$listsRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ListsRepositoryProvider
-    = AutoDisposeAsyncNotifier<List<GroceryItemData>>;
+typedef _$ListsRepository = AutoDisposeAsyncNotifier<List<ShoppingListData>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'recipe_repository.g.dart';
 
 @riverpod
-class RecipeRepositoryProvider extends _$RecipeRepositoryProvider {
+class RecipeRepository extends _$RecipeRepository {
   late final AppDatabase db = ref.read(databaseProvider);
 
   @override

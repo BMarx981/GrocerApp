@@ -25,6 +25,14 @@ class Recipes extends Table {
   TextColumn get name => text().customConstraint('UNIQUE').nullable()();
 }
 
+@DataClassName('ShoppingListData')
+class ShoppingLists extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().customConstraint('UNIQUE')();
+  IntColumn get itemId =>
+      integer().customConstraint('REFERENCES grocery_items(id)').nullable()();
+}
+
 @DataClassName('RecipeGroceryItemData')
 class RecipeGroceryItems extends Table {
   IntColumn get recipeId =>
@@ -36,7 +44,8 @@ class RecipeGroceryItems extends Table {
   Set<Column> get primaryKey => {recipeId, groceryItemId};
 }
 
-@DriftDatabase(tables: [GroceryItems, RecipeGroceryItems, Recipes])
+@DriftDatabase(
+    tables: [GroceryItems, RecipeGroceryItems, Recipes, ShoppingLists])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

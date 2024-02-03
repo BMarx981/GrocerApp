@@ -13,7 +13,7 @@ class App extends StatelessWidget {
     locationBuilder: RoutesLocationBuilder(routes: {
       '/': (context, state, data) => const LoginPage(),
       '/dashboard': (context, state, data) => const DashboardPage(),
-      '/lists': (context, state, data) => const ListsPage(),
+      '/lists': (context, state, data) => ListsPage(),
       '/recipes': (context, state, data) => const RecipesPage(),
     }).call,
   );

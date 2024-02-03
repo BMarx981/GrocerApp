@@ -5,35 +5,25 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'lists_repository.g.dart';
 
 @riverpod
-class ListsRepositoryProvider extends _$ListsRepositoryProvider {
+class ListsRepository extends _$ListsRepository {
   late final AppDatabase db = ref.read(databaseProvider);
 
   @override
-  Future<List<GroceryItemData>> build() {
-    return db.select(db.groceryItems).get();
+  Future<List<ShoppingListData>> build() {
+    return db.select(db.shoppingLists).get();
   }
 
-  Future<int> addItem(
-      {String? name, int quantity = 0, double? price, String? location}) {
-    return db.into(db.groceryItems).insert(
-          GroceryItemsCompanion(
+  Future<int> addList(String name) {
+    return db.into(db.shoppingLists).insert(
+          ShoppingListsCompanion(
             name: Value(name),
-            quantity: Value(quantity),
-            price: Value(price),
-            location: Value(location),
           ),
         );
   }
 
-  Future updateItem(int id,
-      {String? name, int quantity = 0, double? price, String? location}) {
+  Future updateList(int id, {String? name}) {
     final update = (db.update(db.groceryItems)..where((t) => t.id.equals(id)))
-        .write(GroceryItemsCompanion(
-      name: Value(name),
-      quantity: Value(quantity),
-      price: Value(price),
-      location: Value(location),
-    ));
+        .write(GroceryItemsCompanion(name: Value(name)));
     return update;
   }
 }

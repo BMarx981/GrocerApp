@@ -662,16 +662,229 @@ class RecipeGroceryItemsCompanion
   }
 }
 
+class $ShoppingListsTable extends ShoppingLists
+    with TableInfo<$ShoppingListsTable, ShoppingListData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShoppingListsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'UNIQUE');
+  static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<int> itemId = GeneratedColumn<int>(
+      'item_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'REFERENCES grocery_items(id)');
+  @override
+  List<GeneratedColumn> get $columns => [id, name, itemId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shopping_lists';
+  @override
+  VerificationContext validateIntegrity(Insertable<ShoppingListData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(_itemIdMeta,
+          itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShoppingListData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShoppingListData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      itemId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}item_id']),
+    );
+  }
+
+  @override
+  $ShoppingListsTable createAlias(String alias) {
+    return $ShoppingListsTable(attachedDatabase, alias);
+  }
+}
+
+class ShoppingListData extends DataClass
+    implements Insertable<ShoppingListData> {
+  final int id;
+  final String name;
+  final int? itemId;
+  const ShoppingListData({required this.id, required this.name, this.itemId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || itemId != null) {
+      map['item_id'] = Variable<int>(itemId);
+    }
+    return map;
+  }
+
+  ShoppingListsCompanion toCompanion(bool nullToAbsent) {
+    return ShoppingListsCompanion(
+      id: Value(id),
+      name: Value(name),
+      itemId:
+          itemId == null && nullToAbsent ? const Value.absent() : Value(itemId),
+    );
+  }
+
+  factory ShoppingListData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShoppingListData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      itemId: serializer.fromJson<int?>(json['itemId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'itemId': serializer.toJson<int?>(itemId),
+    };
+  }
+
+  ShoppingListData copyWith(
+          {int? id, String? name, Value<int?> itemId = const Value.absent()}) =>
+      ShoppingListData(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        itemId: itemId.present ? itemId.value : this.itemId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ShoppingListData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('itemId: $itemId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, itemId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShoppingListData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.itemId == this.itemId);
+}
+
+class ShoppingListsCompanion extends UpdateCompanion<ShoppingListData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<int?> itemId;
+  const ShoppingListsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.itemId = const Value.absent(),
+  });
+  ShoppingListsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.itemId = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<ShoppingListData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<int>? itemId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (itemId != null) 'item_id': itemId,
+    });
+  }
+
+  ShoppingListsCompanion copyWith(
+      {Value<int>? id, Value<String>? name, Value<int?>? itemId}) {
+    return ShoppingListsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      itemId: itemId ?? this.itemId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<int>(itemId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShoppingListsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('itemId: $itemId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $GroceryItemsTable groceryItems = $GroceryItemsTable(this);
   late final $RecipesTable recipes = $RecipesTable(this);
   late final $RecipeGroceryItemsTable recipeGroceryItems =
       $RecipeGroceryItemsTable(this);
+  late final $ShoppingListsTable shoppingLists = $ShoppingListsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [groceryItems, recipes, recipeGroceryItems];
+      [groceryItems, recipes, recipeGroceryItems, shoppingLists];
 }
