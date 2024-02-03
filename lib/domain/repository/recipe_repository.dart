@@ -1,4 +1,4 @@
-// import 'package:drift/drift.dart';
+import 'package:drift/drift.dart';
 import 'package:grocerapp/data/source/database/database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,5 +11,9 @@ class RecipeRepositoryProvider extends _$RecipeRepositoryProvider {
   @override
   Future<List<RecipeData>> build() {
     return db.select(db.recipes).get();
+  }
+
+  Future<int> addRecipe({String? name}) {
+    return (db.into(db.recipes).insert(RecipesCompanion(name: Value(name))));
   }
 }
