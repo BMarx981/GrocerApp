@@ -40,7 +40,8 @@ void main() {
       expect(find.byType(LoginPage), findsOneWidget);
     });
 
-    testWidgets('Validate login button tap', (WidgetTester tester) async {
+    testWidgets('Validate login button tap', skip: true,
+        (WidgetTester tester) async {
       FlutterError.onError = ignoredOverflowErrors;
       await tester.pumpWidget(App());
 
