@@ -9,6 +9,7 @@ import 'package:grocerapp/presentation/common_widgets/textformfield_widget.dart'
 import 'package:grocerapp/presentation/common_widgets/error_message_widget.dart';
 import 'package:grocerapp/presentation/view/features/bottom_nav_bar/bottom_nav_bar_widget.dart';
 import 'package:grocerapp/presentation/view/features/lists/add_item_dialog.dart';
+import 'package:grocerapp/presentation/view/features/lists/details_tile_widget.dart';
 
 class ListsPage extends ConsumerWidget {
   ListsPage({super.key});
@@ -117,46 +118,8 @@ class ShoppinglistWidget extends ConsumerWidget {
           child: ListView.separated(
             itemCount: data.length,
             itemBuilder: (context, index) {
-              List<GroceryItemData> details = [];
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black.withOpacity(0.5),
-                      Colors.black45.withOpacity(0.2)
-                    ],
-                  ),
-                ),
-                child: ExpansionTile(
-                  onExpansionChanged: (value) async {
-                    details = await ref
-                        .watch(listsRepositoryProvider.notifier)
-                        .fetchGroceryItemsForList(data[index].listId!);
-                  },
-                  iconColor: Colors.white,
-                  collapsedIconColor: Colors.white,
-                  title: GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      data[index].name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [Text(details[index].name ?? "")],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              );
+              // List<GroceryItemData> details = [];
+              return DetailsTileWidget(data: data[index]);
             },
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),

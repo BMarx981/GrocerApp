@@ -21,10 +21,18 @@ class AddItemWidget extends StatelessWidget {
           title: const Text("Add Item"),
           actions: [
             ElevatedButton(
-                onPressed: () => _clearFields, child: const Text("Clear")),
+                key: const Key('clear_item_button'),
+                onPressed: () => _clearFields,
+                child: const Text("Clear")),
             ElevatedButton(
+                key: const Key('add_item_button'),
                 onPressed: () {
-                  ref.read(groceryItemRepositoryProvider.notifier).addItem();
+                  ref.read(groceryItemRepositoryProvider.notifier).addItem(
+                      name: nameController.text,
+                      price: double.parse(priceController.text),
+                      quantity: int.parse(quantityController.text),
+                      location: storeController.text);
+                  Navigator.pop(context);
                 },
                 child: const Text("Submit")),
           ],

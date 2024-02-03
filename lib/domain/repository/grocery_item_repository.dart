@@ -9,8 +9,8 @@ class GroceryItemRepository extends _$GroceryItemRepository {
   late final AppDatabase db = ref.read(databaseProvider);
 
   @override
-  Future<List<GroceryItemData>> build() {
-    return db.select(db.groceryItems).get();
+  Stream<List<GroceryItemData>> build() {
+    return db.select(db.groceryItems).watch();
   }
 
   Future<int> addItem(
