@@ -9,8 +9,8 @@ class ListsRepository extends _$ListsRepository {
   late final AppDatabase db = ref.read(databaseProvider);
 
   @override
-  Future<List<ShoppingListData>> build() {
-    return db.select(db.shoppingLists).get();
+  Stream<List<ShoppingListData>> build() {
+    return db.select(db.shoppingLists).watch();
   }
 
   Future<int> addList(String name) {

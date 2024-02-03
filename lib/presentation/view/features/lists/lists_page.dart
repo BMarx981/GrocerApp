@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocerapp/application/lists_providers/lists_providers.dart';
@@ -8,15 +10,15 @@ import 'package:grocerapp/presentation/view/features/lists/add_item_dialog.dart'
 
 class ListsPage extends ConsumerWidget {
   ListsPage({super.key});
-  TextEditingController newListController = TextEditingController();
+  final newListController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(listsProvider);
+    final listsProviderData = ref.watch(listsProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Lists"),
+        title: const Text("Shopping Lists"),
       ),
       body: Row(
         children: [
@@ -54,7 +56,7 @@ class ListsPage extends ConsumerWidget {
                   ],
                 ),
                 Visibility(
-                  visible: provider,
+                  visible: listsProviderData,
                   child: Row(
                     children: [
                       Expanded(
@@ -82,16 +84,61 @@ class ListsPage extends ConsumerWidget {
                             ref.read(listsProvider.notifier).toggleTextField();
                             newListController.clear();
                           },
-                          child: const Text("Add New List")),
+                          child: const Icon(Icons.add)),
                     ],
                   ),
                 ),
+                const ShoppinglistWidget()
               ],
             ),
           )
         ],
       ),
       bottomNavigationBar: const BottomNavBar(),
+    );
+  }
+}
+
+class ShoppinglistWidget extends ConsumerWidget {
+  const ShoppinglistWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listsRepoProvider = ref.watch(listsRepositoryProvider);
+    return listsRepoProvider.when(
+      data: (data) {
+        return Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.separated(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return Container(
+                child: Text(data[index].name),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+          ),
+        ));
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => ErrorMessageWidget(e.toString()),
+    );
+  }
+}
+
+class ErrorMessageWidget extends StatelessWidget {
+  const ErrorMessageWidget(this.errorMessage, {super.key});
+  final String errorMessage;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      errorMessage,
+      style:
+          Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.red),
     );
   }
 }

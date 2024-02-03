@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocerapp/domain/repository/grocery_item_repository.dart';
-import 'package:grocerapp/domain/repository/lists_repository.dart';
 import 'package:grocerapp/presentation/common_widgets/textformfield_widget.dart';
 
 class AddItemWidget extends StatelessWidget {
