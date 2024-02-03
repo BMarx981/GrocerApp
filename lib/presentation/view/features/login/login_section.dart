@@ -71,14 +71,11 @@ class LoginSection extends ConsumerWidget {
                             : const TextStyle(color: Colors.grey)),
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
-                        print("Validated");
                         provider
                             ? Beamer.of(context)
                                 .beamToReplacementNamed('/dashboard')
                             : null;
-                      } else {
-                        print("Not Validated");
-                      }
+                      } else {}
                     },
                   ),
                 )

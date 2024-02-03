@@ -28,7 +28,7 @@ class Recipes extends Table {
 @DataClassName('ShoppingListData')
 class ShoppingLists extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text().customConstraint('UNIQUE')();
+  TextColumn get name => text()();
   IntColumn get itemId =>
       integer().customConstraint('REFERENCES grocery_items(id)').nullable()();
 }

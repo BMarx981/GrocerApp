@@ -80,6 +80,7 @@ class ListsPage extends ConsumerWidget {
                                 .read(listsRepositoryProvider.notifier)
                                 .addList(newListController.text);
                             ref.read(listsProvider.notifier).toggleTextField();
+                            newListController.clear();
                           },
                           child: const Text("Add New List")),
                     ],

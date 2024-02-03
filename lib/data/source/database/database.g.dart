@@ -681,9 +681,7 @@ class $ShoppingListsTable extends ShoppingLists
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'UNIQUE');
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
   @override
   late final GeneratedColumn<int> itemId = GeneratedColumn<int>(
