@@ -668,15 +668,13 @@ class $ShoppingListsTable extends ShoppingLists
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ShoppingListsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _listIdMeta = const VerificationMeta('listId');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
+  late final GeneratedColumn<int> listId = GeneratedColumn<int>(
+      'list_id', aliasedName, true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      $customConstraints: 'REFERENCES shopping_lists(id)');
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -690,7 +688,7 @@ class $ShoppingListsTable extends ShoppingLists
       requiredDuringInsert: false,
       $customConstraints: 'REFERENCES grocery_items(id)');
   @override
-  List<GeneratedColumn> get $columns => [id, name, itemId];
+  List<GeneratedColumn> get $columns => [listId, name, itemId];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -701,8 +699,9 @@ class $ShoppingListsTable extends ShoppingLists
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    if (data.containsKey('list_id')) {
+      context.handle(_listIdMeta,
+          listId.isAcceptableOrUnknown(data['list_id']!, _listIdMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -718,13 +717,13 @@ class $ShoppingListsTable extends ShoppingLists
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {listId, itemId};
   @override
   ShoppingListData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ShoppingListData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      listId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}list_id']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       itemId: attachedDatabase.typeMapping
@@ -740,14 +739,16 @@ class $ShoppingListsTable extends ShoppingLists
 
 class ShoppingListData extends DataClass
     implements Insertable<ShoppingListData> {
-  final int id;
+  final int? listId;
   final String name;
   final int? itemId;
-  const ShoppingListData({required this.id, required this.name, this.itemId});
+  const ShoppingListData({this.listId, required this.name, this.itemId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || listId != null) {
+      map['list_id'] = Variable<int>(listId);
+    }
     map['name'] = Variable<String>(name);
     if (!nullToAbsent || itemId != null) {
       map['item_id'] = Variable<int>(itemId);
@@ -757,7 +758,8 @@ class ShoppingListData extends DataClass
 
   ShoppingListsCompanion toCompanion(bool nullToAbsent) {
     return ShoppingListsCompanion(
-      id: Value(id),
+      listId:
+          listId == null && nullToAbsent ? const Value.absent() : Value(listId),
       name: Value(name),
       itemId:
           itemId == null && nullToAbsent ? const Value.absent() : Value(itemId),
@@ -768,7 +770,7 @@ class ShoppingListData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ShoppingListData(
-      id: serializer.fromJson<int>(json['id']),
+      listId: serializer.fromJson<int?>(json['listId']),
       name: serializer.fromJson<String>(json['name']),
       itemId: serializer.fromJson<int?>(json['itemId']),
     );
@@ -777,23 +779,25 @@ class ShoppingListData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
+      'listId': serializer.toJson<int?>(listId),
       'name': serializer.toJson<String>(name),
       'itemId': serializer.toJson<int?>(itemId),
     };
   }
 
   ShoppingListData copyWith(
-          {int? id, String? name, Value<int?> itemId = const Value.absent()}) =>
+          {Value<int?> listId = const Value.absent(),
+          String? name,
+          Value<int?> itemId = const Value.absent()}) =>
       ShoppingListData(
-        id: id ?? this.id,
+        listId: listId.present ? listId.value : this.listId,
         name: name ?? this.name,
         itemId: itemId.present ? itemId.value : this.itemId,
       );
   @override
   String toString() {
     return (StringBuffer('ShoppingListData(')
-          ..write('id: $id, ')
+          ..write('listId: $listId, ')
           ..write('name: $name, ')
           ..write('itemId: $itemId')
           ..write(')'))
@@ -801,56 +805,65 @@ class ShoppingListData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, name, itemId);
+  int get hashCode => Object.hash(listId, name, itemId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ShoppingListData &&
-          other.id == this.id &&
+          other.listId == this.listId &&
           other.name == this.name &&
           other.itemId == this.itemId);
 }
 
 class ShoppingListsCompanion extends UpdateCompanion<ShoppingListData> {
-  final Value<int> id;
+  final Value<int?> listId;
   final Value<String> name;
   final Value<int?> itemId;
+  final Value<int> rowid;
   const ShoppingListsCompanion({
-    this.id = const Value.absent(),
+    this.listId = const Value.absent(),
     this.name = const Value.absent(),
     this.itemId = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   ShoppingListsCompanion.insert({
-    this.id = const Value.absent(),
+    this.listId = const Value.absent(),
     required String name,
     this.itemId = const Value.absent(),
+    this.rowid = const Value.absent(),
   }) : name = Value(name);
   static Insertable<ShoppingListData> custom({
-    Expression<int>? id,
+    Expression<int>? listId,
     Expression<String>? name,
     Expression<int>? itemId,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
+      if (listId != null) 'list_id': listId,
       if (name != null) 'name': name,
       if (itemId != null) 'item_id': itemId,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   ShoppingListsCompanion copyWith(
-      {Value<int>? id, Value<String>? name, Value<int?>? itemId}) {
+      {Value<int?>? listId,
+      Value<String>? name,
+      Value<int?>? itemId,
+      Value<int>? rowid}) {
     return ShoppingListsCompanion(
-      id: id ?? this.id,
+      listId: listId ?? this.listId,
       name: name ?? this.name,
       itemId: itemId ?? this.itemId,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
+    if (listId.present) {
+      map['list_id'] = Variable<int>(listId.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -858,15 +871,19 @@ class ShoppingListsCompanion extends UpdateCompanion<ShoppingListData> {
     if (itemId.present) {
       map['item_id'] = Variable<int>(itemId.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('ShoppingListsCompanion(')
-          ..write('id: $id, ')
+          ..write('listId: $listId, ')
           ..write('name: $name, ')
-          ..write('itemId: $itemId')
+          ..write('itemId: $itemId, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }

@@ -13,6 +13,17 @@ class ListsRepository extends _$ListsRepository {
     return db.select(db.shoppingLists).watch();
   }
 
+  Future<List<GroceryItemData>> fetchGroceryItemsForList(int listId) async {
+    final query = db.select(db.groceryItems).join([
+      innerJoin(db.shoppingLists,
+          db.shoppingLists.itemId.equalsExp(db.groceryItems.id))
+    ])
+      ..where(db.shoppingLists.listId.equals(listId));
+    final results = await query.get();
+    print(results);
+    return [];
+  }
+
   Future<int> addList(String name) {
     return db.into(db.shoppingLists).insert(
           ShoppingListsCompanion(

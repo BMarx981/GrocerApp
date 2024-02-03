@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocerapp/application/lists_providers/lists_providers.dart';
+import 'package:grocerapp/data/source/database/database.dart';
 import 'package:grocerapp/domain/repository/lists_repository.dart';
 import 'package:grocerapp/presentation/common_widgets/textformfield_widget.dart';
+import 'package:grocerapp/presentation/common_widgets/error_message_widget.dart';
 import 'package:grocerapp/presentation/view/features/bottom_nav_bar/bottom_nav_bar_widget.dart';
 import 'package:grocerapp/presentation/view/features/lists/add_item_dialog.dart';
 
@@ -115,8 +117,45 @@ class ShoppinglistWidget extends ConsumerWidget {
           child: ListView.separated(
             itemCount: data.length,
             itemBuilder: (context, index) {
+              List<GroceryItemData> details = [];
               return Container(
-                child: Text(data[index].name),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withOpacity(0.5),
+                      Colors.black45.withOpacity(0.2)
+                    ],
+                  ),
+                ),
+                child: ExpansionTile(
+                  onExpansionChanged: (value) async {
+                    details = await ref
+                        .watch(listsRepositoryProvider.notifier)
+                        .fetchGroceryItemsForList(data[index].listId!);
+                  },
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  title: GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      data[index].name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Text(details[index].name ?? "")],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               );
             },
             separatorBuilder: (BuildContext context, int index) =>
@@ -126,19 +165,6 @@ class ShoppinglistWidget extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => ErrorMessageWidget(e.toString()),
-    );
-  }
-}
-
-class ErrorMessageWidget extends StatelessWidget {
-  const ErrorMessageWidget(this.errorMessage, {super.key});
-  final String errorMessage;
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      errorMessage,
-      style:
-          Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.red),
     );
   }
 }

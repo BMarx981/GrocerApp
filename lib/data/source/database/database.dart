@@ -27,10 +27,14 @@ class Recipes extends Table {
 
 @DataClassName('ShoppingListData')
 class ShoppingLists extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  IntColumn get listId =>
+      integer().customConstraint('REFERENCES shopping_lists(id)').nullable()();
   TextColumn get name => text()();
   IntColumn get itemId =>
       integer().customConstraint('REFERENCES grocery_items(id)').nullable()();
+
+  @override
+  Set<Column> get primaryKey => {listId, itemId};
 }
 
 @DataClassName('RecipeGroceryItemData')
