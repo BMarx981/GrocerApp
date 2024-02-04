@@ -32,4 +32,8 @@ class GroceryItemRepository extends _$GroceryItemRepository {
             location: Value(location)));
     return update;
   }
+
+  void deleteItem(int id) {
+    (db.delete(db.groceryItems)..where((t) => t.id.equals(id))).go();
+  }
 }

@@ -20,7 +20,7 @@ class LoginSection extends ConsumerWidget {
         filter: ImageFilter.blur(sigmaX: 4, sigmaY: 3),
         child: Container(
           width: 350,
-          height: 300,
+          height: 350,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(

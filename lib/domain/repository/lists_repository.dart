@@ -46,4 +46,8 @@ class ListsRepository extends _$ListsRepository {
         .write(GroceryItemsCompanion(name: Value(name)));
     return update;
   }
+
+  void deleteList(int id) {
+    (db.delete(db.shoppingLists)..where((t) => t.listId.equals(id))).go();
+  }
 }

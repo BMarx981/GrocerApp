@@ -22,7 +22,7 @@ class RecentItemsGridWidget extends ConsumerWidget {
             padding: const EdgeInsets.all(18.0),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
+                border: Border.all(color: Colors.black, width: 3),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
@@ -52,44 +52,53 @@ class RecentItemsGridWidget extends ConsumerWidget {
                                           EditItemWidget(data: data[index]),
                                     );
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8)),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black,
-                                            blurRadius: 5,
-                                            offset: Offset(4, 4),
-                                          )
-                                        ],
+                                  child: Dismissible(
+                                    key: Key(data[index].toString()),
+                                    onDismissed: (_) {
+                                      ref
+                                          .read(groceryItemRepositoryProvider
+                                              .notifier)
+                                          .deleteItem(data[index].id);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(16),
+                                              bottomRight: Radius.circular(16)),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black,
+                                              blurRadius: 5,
+                                              offset: Offset(4, 4),
+                                            )
+                                          ],
+                                        ),
+                                        child: Wrap(children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                                "Name: ${data[index].name!}"),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                                "Price: ${data[index].price.toString()}"),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                                "Qunatity: ${data[index].quantity.toString()}"),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                                "Store: ${data[index].location.toString()}"),
+                                          ),
+                                        ]),
                                       ),
-                                      child: Wrap(children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                              "Name: ${data[index].name!}"),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                              "Price: ${data[index].price.toString()}"),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                              "Qunatity: ${data[index].quantity.toString()}"),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                              "Store: ${data[index].location.toString()}"),
-                                        ),
-                                      ]),
                                     ),
                                   ),
                                 );
