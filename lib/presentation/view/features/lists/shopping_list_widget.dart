@@ -20,7 +20,6 @@ class ShoppinglistWidget extends ConsumerWidget {
           child: ListView.separated(
             itemCount: data.length,
             itemBuilder: (context, index) {
-              // List<GroceryItemData> details = [];
               return DetailsTileWidget(data: data[index]);
             },
             separatorBuilder: (BuildContext context, int index) =>

@@ -36,13 +36,14 @@ class ListsPage extends ConsumerWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AddItemWidget(),
-                              );
-                            },
-                            child: const Text("Add item")),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AddItemWidget(),
+                            );
+                          },
+                          child: const Text("Add item"),
+                        ),
                       ),
                     ),
                     Expanded(

@@ -20,8 +20,17 @@ class ListsRepository extends _$ListsRepository {
     ])
       ..where(db.shoppingLists.listId.equals(listId));
     final results = await query.get();
-    print(results);
-    return [];
+
+    return results.map((row) {
+      final g = row.readTable(db.groceryItems);
+
+      return GroceryItemData(
+          id: g.id,
+          name: g.name,
+          price: g.price,
+          quantity: g.quantity,
+          location: g.location);
+    }).toList();
   }
 
   Future<int> addList(String name) {
