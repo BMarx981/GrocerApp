@@ -53,7 +53,7 @@ class RecentItemsGridWidget extends ConsumerWidget {
                                     );
                                   },
                                   child: Dismissible(
-                                    key: Key(data[index].toString()),
+                                    key: Key(data[index].id.toString()),
                                     onDismissed: (_) {
                                       ref
                                           .read(groceryItemRepositoryProvider
