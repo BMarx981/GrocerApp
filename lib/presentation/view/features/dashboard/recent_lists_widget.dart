@@ -1,7 +1,10 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocerapp/data/source/database/database.dart';
+import 'package:grocerapp/domain/repository/grocery_item_repository.dart';
 import 'package:grocerapp/domain/repository/lists_repository.dart';
-import 'package:grocerapp/presentation/common_widgets/add_item_dialog.dart';
+import 'package:grocerapp/presentation/common_widgets/add_list_dialog.dart';
 import 'package:grocerapp/presentation/common_widgets/error_message_widget.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/dashboard_title_widget.dart';
 
@@ -39,23 +42,50 @@ class RecentListsGridWidget extends ConsumerWidget {
                             addFunction: () {
                               showDialog(
                                 context: context,
-                                builder: (context) => AddItemWidget(),
+                                builder: (context) => AddListWidget(),
                               );
                             }),
                         Expanded(
-                            child: ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Dismissible(
-                                key: Key(data[index].listId.toString()),
-                                onDismissed: (direction) {
-                                  ref
-                                      .read(listsRepositoryProvider.notifier)
-                                      .deleteList(data[index].listId!);
-                                },
-                                child: Text(data[index].name));
-                          },
-                        )),
+                          child: ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return Dismissible(
+                                  key: Key(data[index].listId.toString()),
+                                  onDismissed: (direction) {
+                                    ref
+                                        .read(listsRepositoryProvider.notifier)
+                                        .deleteList(data[index].listId!);
+                                  },
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      Beamer.of(context)
+                                          .beamToNamed('/add_items_to_list');
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                border: Border.all(width: 2),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(data[index].name),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   )

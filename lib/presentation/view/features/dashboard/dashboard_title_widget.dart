@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grocerapp/presentation/common_widgets/add_item_dialog.dart';
 
 class DashboardTitleWidget extends StatelessWidget {
   const DashboardTitleWidget({
@@ -34,10 +33,7 @@ class DashboardTitleWidget extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AddItemWidget(),
-                    );
+                    addFunction();
                   },
                   icon: const Icon(
                     Icons.add,

@@ -60,6 +60,12 @@ class ListsRepository extends _$ListsRepository {
         );
   }
 
+  Future<int> addItemToList(int listId, int itemId, String name) {
+    return db
+        .into(db.shoppingLists)
+        .insert(ShoppingListData(name: name, listId: listId, itemId: itemId));
+  }
+
   Future updateList(int id, {String? name}) {
     final update = (db.update(db.groceryItems)..where((t) => t.id.equals(id)))
         .write(GroceryItemsCompanion(name: Value(name)));

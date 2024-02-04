@@ -13,6 +13,10 @@ class GroceryItemRepository extends _$GroceryItemRepository {
     return db.select(db.groceryItems).watch();
   }
 
+  Future<List<GroceryItemData>> fetchGroceryItems() async {
+    return await db.select(db.groceryItems).get();
+  }
+
   Future<int> addItem(
       {String? name, int quantity = 0, double? price, String? location}) {
     return db.into(db.groceryItems).insert(GroceryItemsCompanion(

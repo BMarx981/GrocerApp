@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocerapp/presentation/view/features/app_bar/app_bar.dart';
 import 'package:grocerapp/presentation/view/features/bottom_nav_bar/bottom_nav_bar_widget.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/recent_items_grid_widget.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/recent_lists_widget.dart';
@@ -12,9 +13,9 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     int gridCount = 2;
     return Scaffold(
-      appBar: AppBar(
-        key: const Key('dashboard_appbar'),
-        title: const Text("Dashboard"),
+      appBar: const GrocerAppbar(
+        key: Key('dashboard_appbar'),
+        title: "Dashboard",
       ),
       body: Row(
         children: [
