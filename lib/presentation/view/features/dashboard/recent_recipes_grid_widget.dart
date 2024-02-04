@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocerapp/presentation/common_widgets/add_item_dialog.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/dashboard_title_widget.dart';
 
 class RecentRecipesGridWidget extends ConsumerStatefulWidget {
@@ -31,7 +32,14 @@ class _RecentRecipesGridWidgetState
                 Expanded(
                   child: Column(
                     children: [
-                      const DashboardTitleWidget(title: "Recent Recipes"),
+                      DashboardTitleWidget(
+                          title: "Recent Recipes",
+                          addFunction: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AddItemWidget(),
+                            );
+                          }),
                       Expanded(
                           child: ListView.builder(
                         itemCount: 20,

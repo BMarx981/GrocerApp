@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:grocerapp/presentation/common_widgets/add_item_dialog.dart';
 
 class DashboardTitleWidget extends StatelessWidget {
   const DashboardTitleWidget({
     super.key,
     required this.title,
+    required this.addFunction,
   });
 
+  /// The title of the grid widget
   final String title;
+
+  /// The function that gets called when the add button is pressed
+  final Function addFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +22,29 @@ class DashboardTitleWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.purple, borderRadius: BorderRadius.circular(16)),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(title, style: const TextStyle(color: Colors.white)),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(title,
+                        style: const TextStyle(color: Colors.white)),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AddItemWidget(),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                )
+              ],
             ),
           ),
         )

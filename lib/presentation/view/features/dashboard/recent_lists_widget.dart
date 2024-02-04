@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocerapp/presentation/common_widgets/add_item_dialog.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/dashboard_title_widget.dart';
 
 class RecentListsGridWidget extends ConsumerWidget {
@@ -24,7 +25,14 @@ class RecentListsGridWidget extends ConsumerWidget {
               Expanded(
                 child: Column(
                   children: [
-                    const DashboardTitleWidget(title: "Recent Lists"),
+                    DashboardTitleWidget(
+                        title: "Recent Lists",
+                        addFunction: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AddItemWidget(),
+                          );
+                        }),
                     Expanded(
                         child: ListView.builder(
                       itemCount: 20,
