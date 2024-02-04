@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:grocerapp/data/source/database/database.dart';
+import 'package:grocerapp/domain/models/lists_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'lists_repository.g.dart';
@@ -13,6 +14,7 @@ class ListsRepository extends _$ListsRepository {
     return db.select(db.shoppingLists).watch();
   }
 
+  //TODO This still needs work
   Future<List<GroceryItemData>> fetchGroceryItemsForList(int listId) async {
     final query = db.select(db.groceryItems).join([
       innerJoin(db.shoppingLists,
@@ -31,6 +33,23 @@ class ListsRepository extends _$ListsRepository {
           quantity: g.quantity,
           location: g.location);
     }).toList();
+  }
+
+  //TODO This still needs work
+  Future<List<ShoppingListDataWithItems>> getListsWithItems(
+      int itemsListId) async {
+    final query = db.select(db.groceryItems).join([
+      innerJoin(db.shoppingLists,
+          db.shoppingLists.itemId.equalsExp(db.groceryItems.id))
+    ])
+      ..where(db.shoppingLists.listId.equals(itemsListId));
+    final results = await query.get();
+
+    results.map((row) {
+      final g = row.readTable(db.groceryItems);
+      final List<GroceryItemData> gData = [];
+    });
+    return [];
   }
 
   Future<int> addList(String name) {

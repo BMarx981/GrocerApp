@@ -20,7 +20,15 @@ class ShoppinglistWidget extends ConsumerWidget {
           child: ListView.separated(
             itemCount: data.length,
             itemBuilder: (context, index) {
-              return DetailsTileWidget(data: data[index]);
+              return Row(
+                children: [
+                  Expanded(child: DetailsTileWidget(data: data[index])),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {},
+                  )
+                ],
+              );
             },
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
