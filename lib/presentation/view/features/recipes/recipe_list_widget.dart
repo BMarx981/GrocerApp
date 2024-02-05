@@ -24,7 +24,7 @@ class RecipeListWidget extends ConsumerWidget {
             itemBuilder: (context, index) {
               return Row(
                 children: [
-                  RecipeDetailsWidget(name: data[index].name!),
+                  Expanded(child: RecipeDetailsWidget(name: data[index].name!)),
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {},

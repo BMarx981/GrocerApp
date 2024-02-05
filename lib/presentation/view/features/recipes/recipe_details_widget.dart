@@ -14,7 +14,9 @@ class RecipeDetailsWidget extends ConsumerWidget {
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 17, 68, 109),
               ),
-              child: Text(name, style: const TextStyle(color: Colors.white))),
+              child: Center(
+                  child:
+                      Text(name, style: const TextStyle(color: Colors.white)))),
         ),
       ],
     );
