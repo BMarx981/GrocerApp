@@ -42,7 +42,7 @@ class ListsPage extends ConsumerWidget {
                                 builder: (context) => AddItemWidget(),
                               );
                             },
-                            child: const Text("Add item"),
+                            child: const Text("Add grocery item"),
                           ),
                         ),
                       ),

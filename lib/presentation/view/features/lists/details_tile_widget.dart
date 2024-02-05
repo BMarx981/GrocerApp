@@ -50,15 +50,18 @@ class DetailsTileWidget extends ConsumerWidget {
             Column(
               children: [
                 Expanded(
-                  child: ListView.builder(itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text(details[index].name ?? "")],
-                      ),
-                    );
-                  }),
+                  child: ListView.builder(
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Text("Grocery Item name")],
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
             )
