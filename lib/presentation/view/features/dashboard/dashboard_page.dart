@@ -31,8 +31,8 @@ class DashboardPage extends ConsumerWidget {
                     crossAxisCount: gridCount,
                     children: const [
                       RecentItemsGridWidget(),
-                      RecentRecipesGridWidget(),
                       RecentListsGridWidget(),
+                      RecentRecipesGridWidget(),
                     ]);
               },
             ),
