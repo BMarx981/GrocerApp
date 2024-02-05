@@ -6,11 +6,11 @@ part of 'recipe_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recipeRepositoryHash() => r'8484f7ae6987ae63a24c93097ae584cc1635bd0c';
+String _$recipeRepositoryHash() => r'abf8b38672d0f3e1096bd7301c3efcbfa4cb7c7c';
 
 /// See also [RecipeRepository].
 @ProviderFor(RecipeRepository)
-final recipeRepositoryProvider = AutoDisposeAsyncNotifierProvider<
+final recipeRepositoryProvider = AutoDisposeStreamNotifierProvider<
     RecipeRepository, List<RecipeData>>.internal(
   RecipeRepository.new,
   name: r'recipeRepositoryProvider',
@@ -21,6 +21,6 @@ final recipeRepositoryProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$RecipeRepository = AutoDisposeAsyncNotifier<List<RecipeData>>;
+typedef _$RecipeRepository = AutoDisposeStreamNotifier<List<RecipeData>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

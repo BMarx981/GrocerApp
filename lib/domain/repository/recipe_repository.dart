@@ -9,8 +9,8 @@ class RecipeRepository extends _$RecipeRepository {
   late final AppDatabase db = ref.read(databaseProvider);
 
   @override
-  Future<List<RecipeData>> build() {
-    return db.select(db.recipes).get();
+  Stream<List<RecipeData>> build() {
+    return db.select(db.recipes).watch();
   }
 
   Future<int> addRecipe({String? name}) {
