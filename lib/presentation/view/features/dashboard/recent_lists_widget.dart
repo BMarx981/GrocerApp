@@ -25,6 +25,7 @@ class RecentListsGridWidget extends ConsumerWidget {
           child: Container(
             height: 100,
             decoration: BoxDecoration(
+              color: Colors.white,
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(16),
             ),

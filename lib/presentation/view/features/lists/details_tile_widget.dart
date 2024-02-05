@@ -15,7 +15,7 @@ class DetailsTileWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<GroceryItemData> details = [];
     return Dismissible(
-      key: Key(data.listId.toString()),
+      key: UniqueKey(),
       onDismissed: (_) {
         ref.read(listsRepositoryProvider.notifier).deleteList(data.listId!);
       },

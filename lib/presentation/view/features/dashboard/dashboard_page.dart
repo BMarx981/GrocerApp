@@ -17,27 +17,34 @@ class DashboardPage extends ConsumerWidget {
         key: Key('dashboard_appbar'),
         title: "Dashboard",
       ),
-      body: Row(
-        children: [
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                if (constraints.maxWidth < 800) {
-                  gridCount = 1;
-                } else {
-                  gridCount = 2;
-                }
-                return GridView.count(
-                    crossAxisCount: gridCount,
-                    children: const [
-                      RecentItemsGridWidget(),
-                      RecentListsGridWidget(),
-                      RecentRecipesGridWidget(),
-                    ]);
-              },
-            ),
-          )
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.orange.shade300, Colors.red.shade100])),
+        child: Row(
+          children: [
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth < 800) {
+                    gridCount = 1;
+                  } else {
+                    gridCount = 2;
+                  }
+                  return GridView.count(
+                      crossAxisCount: gridCount,
+                      children: const [
+                        RecentItemsGridWidget(),
+                        RecentListsGridWidget(),
+                        RecentRecipesGridWidget(),
+                      ]);
+                },
+              ),
+            )
+          ],
+        ),
       ),
       bottomNavigationBar: const BottomNavBar(),
     );

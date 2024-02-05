@@ -22,6 +22,7 @@ class RecentItemsGridWidget extends ConsumerWidget {
             padding: const EdgeInsets.all(18.0),
             child: Container(
               decoration: BoxDecoration(
+                color: Colors.white,
                 border: Border.all(color: Colors.black, width: 3),
                 borderRadius: BorderRadius.circular(16),
               ),

@@ -55,7 +55,6 @@ class ListsRepository extends _$ListsRepository {
             name: Value(name),
           ),
         );
-    print(result);
     return result;
   }
 
