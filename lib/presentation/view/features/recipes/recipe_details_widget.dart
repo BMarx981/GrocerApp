@@ -7,10 +7,16 @@ class RecipeDetailsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 17, 68, 109),
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 17, 68, 109),
+              ),
+              child: Text(name, style: const TextStyle(color: Colors.white))),
         ),
-        child: Text(name, style: const TextStyle(color: Colors.white)));
+      ],
+    );
   }
 }
