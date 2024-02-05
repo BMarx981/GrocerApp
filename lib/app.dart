@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocerapp/data/source/database/database.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/dashboard_add_items_page.dart';
 import 'package:grocerapp/presentation/view/features/dashboard/dashboard_page.dart';
 import 'package:grocerapp/presentation/view/features/lists/lists_page.dart';
@@ -16,7 +17,8 @@ class App extends StatelessWidget {
       '/dashboard': (context, state, data) => const DashboardPage(),
       '/lists': (context, state, data) => ListsPage(),
       '/recipes': (context, state, data) => const RecipesPage(),
-      '/add_items_to_list': (context, state, data) => const AddItemsPage(),
+      '/add_items_to_list': (context, state, data) =>
+          AddItemsPage(listData: data as ShoppingListData),
     }).call,
   );
   // This widget is the root of your application.

@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:grocerapp/data/source/database/database.dart';
-import 'package:grocerapp/domain/models/lists_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'lists_repository.g.dart';
@@ -14,50 +13,50 @@ class ListsRepository extends _$ListsRepository {
     return db.select(db.shoppingLists).watch();
   }
 
-  //TODO This still needs work
-  Future<List<GroceryItemData>> fetchGroceryItemsForList(int listId) async {
-    final query = db.select(db.groceryItems).join([
+  Stream<List<GroceryItemData>> fetchGroceryItemsForList(int listId) {
+    final query = (db.select(db.groceryItems).join([
       innerJoin(db.shoppingLists,
           db.shoppingLists.itemId.equalsExp(db.groceryItems.id))
     ])
-      ..where(db.shoppingLists.listId.equals(listId));
-    final results = await query.get();
+      ..where(db.shoppingLists.listId.equals(listId)));
 
-    return results.map((row) {
-      final g = row.readTable(db.groceryItems);
-
-      return GroceryItemData(
-          id: g.id,
-          name: g.name,
-          price: g.price,
-          quantity: g.quantity,
-          location: g.location);
-    }).toList();
-  }
-
-  //TODO This still needs work
-  Future<List<ShoppingListDataWithItems>> getListsWithItems(
-      int itemsListId) async {
-    final query = db.select(db.groceryItems).join([
-      innerJoin(db.shoppingLists,
-          db.shoppingLists.itemId.equalsExp(db.groceryItems.id))
-    ])
-      ..where(db.shoppingLists.listId.equals(itemsListId));
-    final results = await query.get();
-
-    results.map((row) {
-      final g = row.readTable(db.groceryItems);
-      final List<GroceryItemData> gData = [];
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        final r = row.readTable(db.groceryItems);
+        return GroceryItemData(
+            id: r.id,
+            name: r.name,
+            price: r.price,
+            quantity: r.quantity,
+            location: r.location);
+      }).toList();
     });
-    return [];
   }
 
-  Future<int> addList(String name) {
-    return db.into(db.shoppingLists).insert(
+  Future<int> addToShoppingList(int groceryItemId, String? name) async {
+    return db.into(db.shoppingLists).insert(ShoppingListsCompanion.insert(
+        itemId: Value(groceryItemId), name: Value(name)));
+  }
+
+  Future<List<GroceryItemData>> getShoppingListItems() async {
+    final query = db.select(db.shoppingLists).join([
+      leftOuterJoin(db.groceryItems,
+          db.groceryItems.id.equalsExp(db.shoppingLists.itemId)),
+    ]);
+
+    final results = await query.get();
+
+    return results.map((row) => row.readTable(db.groceryItems)).toList();
+  }
+
+  Future<int> addList(String name) async {
+    final result = await db.into(db.shoppingLists).insert(
           ShoppingListsCompanion(
             name: Value(name),
           ),
         );
+    print(result);
+    return result;
   }
 
   Future<int> addItemToList(int listId, int itemId, String name) {

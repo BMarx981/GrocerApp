@@ -18,12 +18,13 @@ class GroceryItemRepository extends _$GroceryItemRepository {
   }
 
   Future<int> addItem(
-      {String? name, int quantity = 0, double? price, String? location}) {
-    return db.into(db.groceryItems).insert(GroceryItemsCompanion(
+      {String? name, int quantity = 0, double? price, String? location}) async {
+    final f = await db.into(db.groceryItems).insert(GroceryItemsCompanion(
         name: Value(name),
         quantity: Value(quantity),
         price: Value(price),
         location: Value(location)));
+    return f;
   }
 
   Future updateGroceryItem(int id,

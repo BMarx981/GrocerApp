@@ -31,16 +31,16 @@ class DetailsTileWidget extends ConsumerWidget {
         ),
         child: ExpansionTile(
           onExpansionChanged: (value) async {
-            details = await ref
-                .watch(listsRepositoryProvider.notifier)
-                .fetchGroceryItemsForList(data.listId ?? 0);
+            // details = await ref
+            //     .watch(listsRepositoryProvider.notifier)
+            //     .fetchGroceryItemsForList(data.listId ?? 0);
           },
           iconColor: Colors.white,
           collapsedIconColor: Colors.white,
           title: GestureDetector(
             onTap: () {},
             child: Text(
-              data.name,
+              data.name!,
               style: const TextStyle(
                 color: Colors.white,
               ),

@@ -25,16 +25,18 @@ class Recipes extends Table {
   TextColumn get name => text().customConstraint('UNIQUE').nullable()();
 }
 
-@DataClassName('ShoppingListData')
-class ShoppingLists extends Table {
+@DataClassName('ListRefData')
+class ListRef extends Table {
   IntColumn get listId =>
       integer().customConstraint('REFERENCES shopping_lists(id)').nullable()();
-  TextColumn get name => text()();
   IntColumn get itemId =>
       integer().customConstraint('REFERENCES grocery_items(id)').nullable()();
+}
 
-  @override
-  Set<Column> get primaryKey => {listId, itemId};
+@DataClassName('ShoppingListData')
+class ShoppingLists extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().nullable()();
 }
 
 @DataClassName('RecipeGroceryItemData')
@@ -63,6 +65,7 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    print(file.toString());
 
     if (Platform.isAndroid) {
       await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();

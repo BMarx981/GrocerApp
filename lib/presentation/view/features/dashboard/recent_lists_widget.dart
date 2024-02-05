@@ -1,8 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocerapp/data/source/database/database.dart';
-import 'package:grocerapp/domain/repository/grocery_item_repository.dart';
 import 'package:grocerapp/domain/repository/lists_repository.dart';
 import 'package:grocerapp/presentation/common_widgets/add_list_dialog.dart';
 import 'package:grocerapp/presentation/common_widgets/error_message_widget.dart';
@@ -50,16 +48,21 @@ class RecentListsGridWidget extends ConsumerWidget {
                             itemCount: data.length,
                             itemBuilder: (context, index) {
                               return Dismissible(
-                                  key: Key(data[index].listId.toString()),
+                                  key: UniqueKey(),
                                   onDismissed: (direction) {
                                     ref
                                         .read(listsRepositoryProvider.notifier)
                                         .deleteList(data[index].listId!);
                                   },
                                   child: GestureDetector(
-                                    onTap: () async {
-                                      Beamer.of(context)
-                                          .beamToNamed('/add_items_to_list');
+                                    onTap: () {
+                                      Beamer.of(context).beamToNamed(
+                                        '/add_items_to_list',
+                                        data: data[index],
+                                        popToNamed: '/dashboard',
+                                        transitionDelegate:
+                                            const DefaultTransitionDelegate(),
+                                      );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(2.0),
@@ -75,7 +78,7 @@ class RecentListsGridWidget extends ConsumerWidget {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: Text(data[index].name),
+                                                child: Text(data[index].name!),
                                               ),
                                             ),
                                           ),

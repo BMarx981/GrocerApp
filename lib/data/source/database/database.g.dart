@@ -678,8 +678,8 @@ class $ShoppingListsTable extends ShoppingLists
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
   @override
   late final GeneratedColumn<int> itemId = GeneratedColumn<int>(
@@ -706,8 +706,6 @@ class $ShoppingListsTable extends ShoppingLists
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
     }
     if (data.containsKey('item_id')) {
       context.handle(_itemIdMeta,
@@ -725,7 +723,7 @@ class $ShoppingListsTable extends ShoppingLists
       listId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}list_id']),
       name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}name']),
       itemId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}item_id']),
     );
@@ -740,16 +738,18 @@ class $ShoppingListsTable extends ShoppingLists
 class ShoppingListData extends DataClass
     implements Insertable<ShoppingListData> {
   final int? listId;
-  final String name;
+  final String? name;
   final int? itemId;
-  const ShoppingListData({this.listId, required this.name, this.itemId});
+  const ShoppingListData({this.listId, this.name, this.itemId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (!nullToAbsent || listId != null) {
       map['list_id'] = Variable<int>(listId);
     }
-    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
     if (!nullToAbsent || itemId != null) {
       map['item_id'] = Variable<int>(itemId);
     }
@@ -760,7 +760,7 @@ class ShoppingListData extends DataClass
     return ShoppingListsCompanion(
       listId:
           listId == null && nullToAbsent ? const Value.absent() : Value(listId),
-      name: Value(name),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       itemId:
           itemId == null && nullToAbsent ? const Value.absent() : Value(itemId),
     );
@@ -771,7 +771,7 @@ class ShoppingListData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ShoppingListData(
       listId: serializer.fromJson<int?>(json['listId']),
-      name: serializer.fromJson<String>(json['name']),
+      name: serializer.fromJson<String?>(json['name']),
       itemId: serializer.fromJson<int?>(json['itemId']),
     );
   }
@@ -780,18 +780,18 @@ class ShoppingListData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'listId': serializer.toJson<int?>(listId),
-      'name': serializer.toJson<String>(name),
+      'name': serializer.toJson<String?>(name),
       'itemId': serializer.toJson<int?>(itemId),
     };
   }
 
   ShoppingListData copyWith(
           {Value<int?> listId = const Value.absent(),
-          String? name,
+          Value<String?> name = const Value.absent(),
           Value<int?> itemId = const Value.absent()}) =>
       ShoppingListData(
         listId: listId.present ? listId.value : this.listId,
-        name: name ?? this.name,
+        name: name.present ? name.value : this.name,
         itemId: itemId.present ? itemId.value : this.itemId,
       );
   @override
@@ -817,7 +817,7 @@ class ShoppingListData extends DataClass
 
 class ShoppingListsCompanion extends UpdateCompanion<ShoppingListData> {
   final Value<int?> listId;
-  final Value<String> name;
+  final Value<String?> name;
   final Value<int?> itemId;
   final Value<int> rowid;
   const ShoppingListsCompanion({
@@ -828,10 +828,10 @@ class ShoppingListsCompanion extends UpdateCompanion<ShoppingListData> {
   });
   ShoppingListsCompanion.insert({
     this.listId = const Value.absent(),
-    required String name,
+    this.name = const Value.absent(),
     this.itemId = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : name = Value(name);
+  });
   static Insertable<ShoppingListData> custom({
     Expression<int>? listId,
     Expression<String>? name,
@@ -848,7 +848,7 @@ class ShoppingListsCompanion extends UpdateCompanion<ShoppingListData> {
 
   ShoppingListsCompanion copyWith(
       {Value<int?>? listId,
-      Value<String>? name,
+      Value<String?>? name,
       Value<int?>? itemId,
       Value<int>? rowid}) {
     return ShoppingListsCompanion(
