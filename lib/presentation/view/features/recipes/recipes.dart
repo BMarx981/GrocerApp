@@ -9,22 +9,25 @@ class RecipesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
-      appBar: GrocerAppbar(
+    return Scaffold(
+      appBar: const GrocerAppbar(
         title: "Recipes",
       ),
-      body: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                RecipeListWidget(),
-              ],
-            ),
-          )
-        ],
+      body: Container(
+        decoration: const BoxDecoration(color: Colors.lightBlue),
+        child: const Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  RecipeListWidget(),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }
