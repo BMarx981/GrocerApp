@@ -74,9 +74,9 @@ class AddItemWidget extends StatelessWidget {
   }
 
   void _clearFields() {
-    nameController.text = "";
-    priceController.text = "";
-    quantityController.text = "";
-    storeController.text = "";
+    nameController.clear();
+    priceController.clear();
+    quantityController.clear();
+    storeController.clear();
   }
 }
